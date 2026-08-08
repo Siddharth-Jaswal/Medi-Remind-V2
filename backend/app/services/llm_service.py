@@ -10,7 +10,9 @@ LLM_MODEL = os.getenv("LLM_MODEL", "local-model")
 
 prompt_message = """
 Extract the medicines from this prescription. 
-Return ONLY a valid JSON array of objects, without any markdown formatting, no code blocks like ```json, and no extra text.
+CRITICAL: Do NOT include any <think> tags. Do NOT output any reasoning, thinking process, or explanations.
+Output ONLY the raw JSON array immediately, starting with '[' and ending with ']'.
+Do not use markdown formatting or code blocks like ```json.
 Each object must have exactly these keys:
 - "name" (string): the name of the medicine
 - "dosage" (string): the dosage (e.g., "625mg", "1 Tablet")
@@ -82,6 +84,11 @@ async def extract_medicines_from_image(image_bytes: bytes, filename: str) -> Lis
             llm_text = llm_text[:-3]
             
         llm_text = llm_text.strip()
+        
+        # Aggressively extract the JSON array even if there is surrounding garbage
+        json_match = re.search(r'\[.*\]', llm_text, flags=re.DOTALL)
+        if json_match:
+            llm_text = json_match.group(0)
         
         try:
             medicines = json.loads(llm_text)
