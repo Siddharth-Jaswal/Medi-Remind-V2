@@ -9,15 +9,19 @@ LLM_API_KEY = os.getenv("LLM_API_KEY", "lm-studio")
 LLM_MODEL = os.getenv("LLM_MODEL", "local-model")
 
 prompt_message = """
-Extract the medicines from this prescription. 
-CRITICAL: Do NOT include any <think> tags. Do NOT output any reasoning, thinking process, or explanations.
-Output ONLY a raw JSON object with a single key 'medicines' which contains an array of objects.
-Do not use markdown formatting or code blocks like ```json.
-Each object in the 'medicines' array must have exactly these keys:
-- "name" (string): the name of the medicine
-- "dosage" (string): the dosage (e.g., "625mg", "1 Tablet")
-- "food_relation" (string): e.g., "After Food", "Before Food", "Empty Stomach"
-- "duration_days" (integer): number of days, default to 5 if not explicitly mentioned.
+Extract the medicines from this prescription image. 
+You must respond with a valid JSON object.
+Use exactly this JSON schema:
+{
+  "medicines": [
+    {
+      "name": "Medicine Name",
+      "dosage": "Dosage amount (e.g., '625mg', '1 Tablet')",
+      "food_relation": "After Food, Before Food, or Empty Stomach",
+      "duration_days": 5
+    }
+  ]
+}
 """
 
 async def extract_medicines_from_image(image_bytes: bytes, filename: str) -> List[Dict[str, Any]]:
