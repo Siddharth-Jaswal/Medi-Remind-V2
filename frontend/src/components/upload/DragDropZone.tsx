@@ -15,6 +15,7 @@ export default function DragDropZone() {
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [showTelegram, setShowTelegram] = useState(false);
+  const [uploadPassword, setUploadPassword] = useState("");
   
   const { user } = useAuth();
   const router = useRouter();
@@ -59,6 +60,7 @@ export default function DragDropZone() {
 
     const formData = new FormData();
     formData.append("image", file);
+    formData.append("password", uploadPassword);
 
     try {
       const token = localStorage.getItem("mediremind_token");
@@ -157,6 +159,19 @@ export default function DragDropZone() {
             {error && (
               <div className="mb-6 p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive font-medium text-sm">
                 {error}
+              </div>
+            )}
+
+            {!result && !isUploading && (
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">Upload Password (Required)</label>
+                <input
+                  type="password"
+                  placeholder="Enter the secret upload password..."
+                  value={uploadPassword}
+                  onChange={(e) => setUploadPassword(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all"
+                />
               </div>
             )}
 

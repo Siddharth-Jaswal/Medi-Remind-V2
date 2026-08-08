@@ -1,6 +1,6 @@
 import os
 import uuid
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
 from typing import List, Dict, Any
 
 from app.services.llm_service import extract_medicines_from_image
@@ -12,9 +12,17 @@ router = APIRouter(prefix="/api/prescription", tags=["Prescription"])
 
 @router.post("/upload")
 async def upload_prescription(
+    password: str = Form(...),
     image: UploadFile = File(...),
     current_user: dict = Depends(get_current_user)
 ):
+    # Verify Upload Password
+    expected_password = os.getenv("UPLOAD_PASSWORD")
+    if not expected_password:
+        raise HTTPException(status_code=500, detail="Server misconfiguration: UPLOAD_PASSWORD not set.")
+    if password != expected_password:
+        raise HTTPException(status_code=403, detail="Invalid upload password.")
+
     if not image.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image.")
 
