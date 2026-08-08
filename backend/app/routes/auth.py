@@ -29,36 +29,40 @@ class Token(BaseModel):
 
 @router.post("/register", response_model=Token)
 async def register(request: RegisterRequest):
-    # Check if user exists
-    existing_user = await db.db["users"].find_one({"email": request.email})
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+    try:
+        # Check if user exists
+        existing_user = await db.db["users"].find_one({"email": request.email})
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+            
+        # Create new user
+        hashed_password = get_password_hash(request.password)
+        new_user = User(
+            name=request.name,
+            email=request.email,
+            hashed_password=hashed_password
+        )
         
-    # Create new user
-    hashed_password = get_password_hash(request.password)
-    new_user = User(
-        name=request.name,
-        email=request.email,
-        hashed_password=hashed_password
-    )
-    
-    result = await db.db["users"].insert_one(new_user.model_dump(by_alias=True, exclude_none=True))
-    
-    # Create token
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": new_user.email}, expires_delta=access_token_expires
-    )
-    
-    return {
-        "access_token": access_token, 
-        "token_type": "bearer",
-        "user": {
-            "id": str(result.inserted_id),
-            "name": new_user.name,
-            "email": new_user.email
+        result = await db.db["users"].insert_one(new_user.model_dump(by_alias=True, exclude_none=True))
+        
+        # Create token
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": new_user.email}, expires_delta=access_token_expires
+        )
+        
+        return {
+            "access_token": access_token, 
+            "token_type": "bearer",
+            "user": {
+                "id": str(result.inserted_id),
+                "name": new_user.name,
+                "email": new_user.email
+            }
         }
-    }
+    except Exception as e:
+        import traceback
+        raise HTTPException(status_code=500, detail=traceback.format_exc())
 
 @router.post("/login", response_model=Token)
 async def login(request: LoginRequest):
