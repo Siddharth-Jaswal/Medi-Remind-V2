@@ -14,6 +14,10 @@ async def check_reminders():
         return
         
     now = datetime.now()
+    # Apply IST timezone offset (+5:30)
+    from datetime import timezone, timedelta
+    tz_ist = timezone(timedelta(hours=5, minutes=30))
+    now = datetime.now(tz_ist)
     current_time_str = now.strftime("%H:%M")
     
     try:
