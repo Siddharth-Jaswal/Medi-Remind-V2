@@ -28,7 +28,7 @@ export default function HistoryPage() {
   const fetchHistory = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:8001/api/prescription/history", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/prescription/history`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -51,7 +51,7 @@ export default function HistoryPage() {
 
   const toggleReminder = async (reminderId: string) => {
     try {
-      const res = await fetch(`http://localhost:8001/api/reminders/${reminderId}/toggle`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/reminders/${reminderId}/toggle`, {
         method: "PATCH",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -65,7 +65,7 @@ export default function HistoryPage() {
 
   const deleteReminder = async (reminderId: string) => {
     try {
-      const res = await fetch(`http://localhost:8001/api/reminders/${reminderId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/reminders/${reminderId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -80,7 +80,7 @@ export default function HistoryPage() {
   const handleAddReminder = async (medicineId: string) => {
     if (!newTime) return;
     try {
-      const res = await fetch("http://localhost:8001/api/reminders/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/reminders/`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export default function HistoryPage() {
     setIsDeleting(true);
     
     try {
-      const res = await fetch(`http://localhost:8001/api/prescription/${deletingId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/prescription/${deletingId}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -450,7 +450,7 @@ export default function HistoryPage() {
                           const btn = document.getElementById("saveChatIdBtn");
                           if (btn) btn.innerHTML = "Verifying...";
                           try {
-                            const res = await fetch("http://localhost:8001/api/telegram/connect", {
+                            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/telegram/connect`, {
                               method: "POST",
                               headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
                               body: JSON.stringify({ chat_id: input.value })

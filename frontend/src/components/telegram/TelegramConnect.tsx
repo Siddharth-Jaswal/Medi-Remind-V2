@@ -14,7 +14,7 @@ export default function TelegramConnect({ prescriptionId }: { prescriptionId: st
     setIsSaving(true);
     try {
       const token = localStorage.getItem("mediremind_token");
-      await fetch("http://localhost:8001/api/telegram/connect", {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/telegram/connect`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

@@ -23,7 +23,7 @@ export default function RegisterPage() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:8001/api/auth/register", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -34,7 +34,7 @@ export default function RegisterPage() {
         throw new Error(data.detail || "Failed to register");
       }
 
-      const loginRes = await fetch("http://localhost:8001/api/auth/login", {
+      const loginRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

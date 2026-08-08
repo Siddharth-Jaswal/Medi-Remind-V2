@@ -64,7 +64,7 @@ export default function DragDropZone() {
 
     try {
       const token = localStorage.getItem("mediremind_token");
-      const response = await fetch("http://localhost:8001/api/prescription/upload", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}/api/prescription/upload`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
