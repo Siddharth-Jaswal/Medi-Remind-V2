@@ -1,9 +1,12 @@
 import httpx
 import json
 import os
+import base64
 from typing import List, Dict, Any
 
-LLM_GATEWAY_URL = os.getenv("LLM_SERVICE_URL", "http://localhost:8000/vision")
+LLM_SERVICE_URL = os.getenv("LLM_SERVICE_URL", "http://localhost:1234/v1/chat/completions")
+LLM_API_KEY = os.getenv("LLM_API_KEY", "lm-studio")
+LLM_MODEL = os.getenv("LLM_MODEL", "local-model")
 
 prompt_message = """
 Extract the medicines from this prescription. 
@@ -17,23 +20,58 @@ Each object must have exactly these keys:
 
 async def extract_medicines_from_image(image_bytes: bytes, filename: str) -> List[Dict[str, Any]]:
     """
-    Sends the image to the LLM Gateway and extracts structured JSON.
+    Sends the image to the LLM Gateway (OpenAI Compatible) and extracts structured JSON.
     """
+    # Base64 encode the image
+    base64_image = base64.b64encode(image_bytes).decode('utf-8')
+    
+    headers = {
+        "Authorization": f"Bearer {LLM_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    payload = {
+        "model": LLM_MODEL,
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": prompt_message
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64,{base64_image}"
+                        }
+                    }
+                ]
+            }
+        ],
+        "temperature": 0.1,
+        "max_tokens": 4096
+    }
+    
     async with httpx.AsyncClient(timeout=60.0) as client:
-        # Create form data matching the LLM Gateway README
-        files = {
-            "image": (filename, image_bytes, "image/jpeg")
-        }
-        data = {
-            "message": prompt_message,
-            "stream": "false"
-        }
+        response = await client.post(LLM_SERVICE_URL, json=payload, headers=headers)
         
-        response = await client.post(LLM_GATEWAY_URL, data=data, files=files)
-        response.raise_for_status()
-        
+        if response.status_code != 200:
+            print(f"LLM API Error: {response.text}")
+            response.raise_for_status()
+            
         result = response.json()
-        llm_text = result.get("response", "").strip()
+        
+        # Extract response from standard OpenAI format
+        try:
+            llm_text = result["choices"][0]["message"]["content"].strip()
+        except (KeyError, IndexError):
+            print(f"Unexpected response format: {result}")
+            raise Exception("Failed to parse response format from LLM API")
+        
+        # Clean up any reasoning tags (e.g. from Qwen/DeepSeek)
+        import re
+        llm_text = re.sub(r"<think>.*?</think>", "", llm_text, flags=re.DOTALL).strip()
         
         # Clean up any potential markdown if the LLM ignores instructions
         if llm_text.startswith("```json"):
@@ -48,7 +86,6 @@ async def extract_medicines_from_image(image_bytes: bytes, filename: str) -> Lis
         try:
             medicines = json.loads(llm_text)
             if not isinstance(medicines, list):
-                # Fallback if it wrapped it in an object
                 if isinstance(medicines, dict) and "medicines" in medicines:
                     medicines = medicines["medicines"]
                 else:

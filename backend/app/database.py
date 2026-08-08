@@ -2,8 +2,10 @@ import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 
-load_dotenv()
-
+env_name = os.getenv("APP_ENV", "development")
+env_file = f".env.{env_name}"
+load_dotenv(env_file)
+print(f"Loaded environment variables from {env_file}")
 MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
 DATABASE_NAME = os.getenv("DATABASE_NAME", "mediremind")
 
