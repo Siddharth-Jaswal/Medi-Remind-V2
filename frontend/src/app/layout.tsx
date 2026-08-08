@@ -21,6 +21,7 @@ import { AuthProvider } from "@/context/AuthContext";
 
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "sonner";
+import ServerWarmup from "@/components/ServerWarmup";
 
 export default function RootLayout({
   children,
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}>
         <AuthProvider>
           <ThemeProvider>
+            <ServerWarmup />
             {children}
             <Toaster position="top-right" richColors theme="system" />
           </ThemeProvider>
