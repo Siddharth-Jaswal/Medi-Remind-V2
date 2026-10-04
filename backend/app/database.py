@@ -6,8 +6,13 @@ env_name = os.getenv("APP_ENV", "development")
 env_file = f".env.{env_name}"
 load_dotenv(env_file)
 print(f"Loaded environment variables from {env_file}")
-MONGODB_URL = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
-DATABASE_NAME = os.getenv("DATABASE_NAME", "mediremind")
+def get_mongo_url():
+    raw_url = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
+    return raw_url.strip().strip('"').strip("'")
+
+def get_db_name():
+    raw_db = os.getenv("DATABASE_NAME", "mediremind")
+    return raw_db.strip().strip('"').strip("'")
 
 class Database:
     client: AsyncIOMotorClient = None
@@ -16,9 +21,11 @@ class Database:
 db = Database()
 
 async def connect_to_mongo():
-    print(f"Connecting to MongoDB at {MONGODB_URL}...")
-    db.client = AsyncIOMotorClient(MONGODB_URL)
-    db.db = db.client[DATABASE_NAME]
+    url = get_mongo_url()
+    database_name = get_db_name()
+    print(f"Connecting to MongoDB at {url}...")
+    db.client = AsyncIOMotorClient(url)
+    db.db = db.client[database_name]
     print("Connected to MongoDB!")
 
 async def close_mongo_connection():
