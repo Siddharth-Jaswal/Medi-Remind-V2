@@ -137,82 +137,82 @@ export default function HistoryPage() {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Navigation */}
       <nav className="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight">
+        <div className="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-1.5 sm:gap-2 font-bold text-lg sm:text-xl tracking-tight">
             <div className="p-1.5 bg-primary/10 rounded-lg">
               <Pill className="text-primary w-5 h-5" />
             </div>
-            <span>MediRemind</span>
+            <span className="hidden xs:inline">MediRemind</span>
           </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Upload</Link>
-            <Link href="/dashboard/history" className="text-sm font-medium text-primary">Dashboard</Link>
+          <div className="flex items-center gap-2.5 sm:gap-6">
+            <Link href="/dashboard" className="text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1">Upload</Link>
+            <Link href="/dashboard/history" className="text-xs sm:text-sm font-semibold text-primary px-2 py-1 bg-primary/10 rounded-lg">Dashboard</Link>
             <ThemeToggle />
           </div>
         </div>
       </nav>
 
-      <main className="container mx-auto px-6 py-12">
+      <main className="container mx-auto px-3 sm:px-6 py-6 sm:py-12">
         <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-            <div className="flex items-center gap-4">
-              <Link href="/dashboard" className="p-2 bg-secondary hover:bg-secondary/80 rounded-full transition-colors border border-border">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 mb-6 sm:mb-10">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <Link href="/dashboard" className="p-2 bg-secondary hover:bg-secondary/80 rounded-full transition-colors border border-border shrink-0">
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight">My Dashboard</h1>
-                <p className="text-muted-foreground mt-1">Welcome back, {user?.name}. Here are your prescriptions and reminders.</p>
+              <div className="min-w-0">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">My Dashboard</h1>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 truncate">Welcome back, {user?.name}. Manage your reminders.</p>
               </div>
             </div>
           </div>
 
           {/* Pill Tabs */}
-          <div className="flex items-center p-1 bg-secondary rounded-2xl w-full md:w-fit mb-8 border border-border">
+          <div className="grid grid-cols-3 p-1 bg-secondary rounded-xl sm:rounded-2xl w-full md:w-fit mb-6 sm:mb-8 border border-border text-center">
             <button
               onClick={() => setActiveTab("reminders")}
-              className={`relative flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-xl transition-colors ${
+              className={`relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl transition-colors ${
                 activeTab === "reminders" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {activeTab === "reminders" && (
-                <motion.div layoutId="pillTab" className="absolute inset-0 bg-primary rounded-xl shadow-md" />
+                <motion.div layoutId="pillTab" className="absolute inset-0 bg-primary rounded-lg sm:rounded-xl shadow-md" />
               )}
-              <Clock className="w-4 h-4 relative z-10" />
-              <span className="relative z-10">Reminders</span>
+              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 relative z-10 shrink-0" />
+              <span className="relative z-10 truncate">Reminders</span>
             </button>
             <button
               onClick={() => setActiveTab("prescriptions")}
-              className={`relative flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-xl transition-colors ${
+              className={`relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl transition-colors ${
                 activeTab === "prescriptions" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {activeTab === "prescriptions" && (
-                <motion.div layoutId="pillTab" className="absolute inset-0 bg-primary rounded-xl shadow-md" />
+                <motion.div layoutId="pillTab" className="absolute inset-0 bg-primary rounded-lg sm:rounded-xl shadow-md" />
               )}
-              <FileText className="w-4 h-4 relative z-10" />
-              <span className="relative z-10">Prescriptions</span>
+              <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 relative z-10 shrink-0" />
+              <span className="relative z-10 truncate">Prescriptions</span>
             </button>
             <button
               onClick={() => setActiveTab("settings")}
-              className={`relative flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold rounded-xl transition-colors ${
+              className={`relative flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold rounded-lg sm:rounded-xl transition-colors ${
                 activeTab === "settings" ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {activeTab === "settings" && (
-                <motion.div layoutId="pillTab" className="absolute inset-0 bg-primary rounded-xl shadow-md" />
+                <motion.div layoutId="pillTab" className="absolute inset-0 bg-primary rounded-lg sm:rounded-xl shadow-md" />
               )}
-              <Settings className="w-4 h-4 relative z-10" />
-              <span className="relative z-10">Settings</span>
+              <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4 relative z-10 shrink-0" />
+              <span className="relative z-10 truncate">Settings</span>
             </button>
           </div>
 
           {isLoading ? (
-            <div className="flex items-center justify-center py-32">
+            <div className="flex items-center justify-center py-24 sm:py-32">
               <Loader2 className="w-8 h-8 text-primary animate-spin" />
             </div>
           ) : error ? (
-            <div className="p-4 bg-destructive/10 border border-destructive/20 text-destructive rounded-2xl flex items-center gap-3">
-              <AlertCircle className="w-5 h-5" />
+            <div className="p-4 bg-destructive/10 border border-destructive/20 text-destructive rounded-2xl flex items-center gap-3 text-sm">
+              <AlertCircle className="w-5 h-5 shrink-0" />
               {error}
             </div>
           ) : (
@@ -226,44 +226,44 @@ export default function HistoryPage() {
                   className="space-y-4"
                 >
                   {allReminders.length === 0 ? (
-                    <div className="bg-card border border-border rounded-3xl p-16 text-center shadow-sm">
-                      <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Clock className="w-8 h-8 text-muted-foreground" />
+                    <div className="bg-card border border-border rounded-2xl sm:rounded-3xl p-8 sm:p-16 text-center shadow-sm">
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" />
                       </div>
-                      <p className="text-xl font-semibold mb-2">No active reminders</p>
-                      <p className="text-muted-foreground mb-8 max-w-sm mx-auto">You don't have any reminders scheduled yet. Add one from your past prescriptions.</p>
-                      <button onClick={() => setActiveTab("prescriptions")} className="px-6 py-3 bg-secondary text-foreground font-semibold rounded-xl hover:bg-secondary/80 transition-colors border border-border shadow-sm">
+                      <p className="text-lg sm:text-xl font-semibold mb-2">No active reminders</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-6 sm:mb-8 max-w-sm mx-auto">You don't have any reminders scheduled yet. Add one from your past prescriptions.</p>
+                      <button onClick={() => setActiveTab("prescriptions")} className="px-5 sm:px-6 py-2.5 sm:py-3 bg-secondary text-foreground text-sm font-semibold rounded-xl hover:bg-secondary/80 transition-colors border border-border shadow-sm">
                         View Prescriptions
                       </button>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                       {allReminders.map((r, idx) => (
                         <motion.div 
                           key={r.id}
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ delay: idx * 0.05 }}
-                          className={`flex items-center justify-between p-5 rounded-2xl border shadow-sm transition-all ${
+                          className={`flex items-center justify-between p-4 sm:p-5 rounded-2xl border shadow-sm transition-all gap-3 ${
                             r.active ? "bg-card border-border hover:shadow-md" : "bg-secondary/50 border-transparent opacity-60 grayscale-[0.5]"
                           }`}
                         >
-                          <div className="flex items-center gap-4">
-                            <div className={`font-bold text-xl px-4 py-3 rounded-xl ${
+                          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                            <div className={`font-bold text-base sm:text-xl px-3 sm:px-4 py-2 sm:py-3 rounded-xl shrink-0 ${
                               r.active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
                             }`}>
                               {r.time}
                             </div>
-                            <div>
-                              <p className="font-semibold text-foreground leading-tight">{r.medicineName}</p>
-                              <p className="text-sm text-muted-foreground mt-1">{r.dosage} • {r.food}</p>
+                            <div className="min-w-0">
+                              <p className="font-semibold text-sm sm:text-base text-foreground leading-tight truncate">{r.medicineName}</p>
+                              <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 truncate">{r.dosage} • {r.food}</p>
                             </div>
                           </div>
                           
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1 shrink-0">
                             <button 
                               onClick={() => toggleReminder(r.id)}
-                              className={`w-12 h-7 rounded-full flex items-center p-1 transition-colors ${
+                              className={`w-11 sm:w-12 h-6 sm:h-7 rounded-full flex items-center p-0.5 sm:p-1 transition-colors ${
                                 r.active ? "bg-primary" : "bg-muted-foreground/30"
                               }`}
                             >
@@ -273,9 +273,10 @@ export default function HistoryPage() {
                             </button>
                             <button 
                               onClick={() => deleteReminder(r.id)}
-                              className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-colors ml-2"
+                              className="p-1.5 sm:p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-xl transition-colors ml-1"
+                              title="Delete reminder"
                             >
-                              <Trash2 className="w-5 h-5" />
+                              <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                             </button>
                           </div>
                         </motion.div>
@@ -289,16 +290,16 @@ export default function HistoryPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="space-y-6"
+                  className="space-y-4 sm:space-y-6"
                 >
                   {history.length === 0 ? (
-                    <div className="bg-card border border-border rounded-3xl p-16 text-center shadow-sm">
-                      <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Calendar className="w-8 h-8 text-muted-foreground" />
+                    <div className="bg-card border border-border rounded-2xl sm:rounded-3xl p-8 sm:p-16 text-center shadow-sm">
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Calendar className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" />
                       </div>
-                      <p className="text-xl font-semibold mb-2">No prescriptions yet</p>
-                      <p className="text-muted-foreground mb-8 max-w-sm mx-auto">Upload a prescription to start tracking your medicines and get automated reminders.</p>
-                      <Link href="/dashboard" className="inline-block px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:opacity-90 transition-all shadow-md">
+                      <p className="text-lg sm:text-xl font-semibold mb-2">No prescriptions yet</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-6 sm:mb-8 max-w-sm mx-auto">Upload a prescription to start tracking your medicines and get automated reminders.</p>
+                      <Link href="/dashboard" className="inline-block px-5 sm:px-6 py-2.5 sm:py-3 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:opacity-90 transition-all shadow-md">
                         Upload Prescription
                       </Link>
                     </div>
@@ -309,9 +310,9 @@ export default function HistoryPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: pIdx * 0.1 }}
-                        className="bg-card border border-border rounded-3xl p-6 md:p-8 overflow-hidden shadow-sm"
+                        className="bg-card border border-border rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 overflow-hidden shadow-sm"
                       >
-                        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4 border-b border-border pb-6">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 sm:mb-6 gap-3 border-b border-border pb-4 sm:pb-6">
                           <div>
                             <div className="flex items-center gap-2 mb-1">
                               <p className="text-xs font-bold text-primary uppercase tracking-wider">Prescription Record</p>
@@ -319,19 +320,82 @@ export default function HistoryPage() {
                                 <CheckCircle className="w-3 h-3" /> Processed
                               </div>
                             </div>
-                            <p className="text-sm text-muted-foreground">
-                              Added on {new Date(prescription.created_at).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                            <p className="text-xs sm:text-sm text-muted-foreground">
+                              Added on {new Date(prescription.created_at).toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
                             </p>
                           </div>
                           <button 
                             onClick={() => setDeletingId(prescription._id)}
-                            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-xl transition-colors border border-transparent hover:border-destructive/20 shadow-sm hover:shadow"
+                            className="flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-destructive hover:bg-destructive/10 rounded-xl transition-colors border border-transparent hover:border-destructive/20 self-start sm:self-auto"
                           >
-                            <Trash2 className="w-4 h-4" /> Delete
+                            <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Delete
                           </button>
                         </div>
 
-                        <div className="overflow-x-auto">
+                        {/* Mobile Cards View (< md) */}
+                        <div className="block md:hidden space-y-3">
+                          {prescription.medicines.map((m: any) => (
+                            <div key={m._id} className="p-3.5 rounded-xl bg-secondary/30 border border-border/60 space-y-2">
+                              <div className="flex items-start justify-between gap-2">
+                                <div>
+                                  <p className="font-bold text-sm text-foreground">{m.name}</p>
+                                  <p className="text-xs text-muted-foreground">{m.dosage} • {m.food_relation}</p>
+                                </div>
+                              </div>
+
+                              <div className="pt-1">
+                                <p className="text-[11px] font-semibold text-muted-foreground uppercase mb-1.5">Scheduled Times</p>
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  {m.reminders.map((r: any) => (
+                                    <span key={r.id} className={`px-2 py-0.5 rounded-md text-xs font-bold border ${
+                                      r.active ? "bg-primary/10 text-primary border-primary/20" : "bg-secondary text-muted-foreground border-transparent"
+                                    }`}>
+                                      {r.time}
+                                    </span>
+                                  ))}
+                                  
+                                  {addingForMed === m._id ? (
+                                    <div className="flex items-center gap-1 bg-secondary border border-border p-1 rounded-lg">
+                                      <input 
+                                        type="time" 
+                                        value={newTime}
+                                        onChange={(e) => setNewTime(e.target.value)}
+                                        className="bg-transparent text-foreground text-xs outline-none border-none px-1 font-medium"
+                                        autoFocus
+                                      />
+                                      <button 
+                                        onClick={() => handleAddReminder(m._id)}
+                                        className="p-1 bg-primary text-primary-foreground rounded-md hover:opacity-90"
+                                      >
+                                        <CheckCircle className="w-3 h-3" />
+                                      </button>
+                                      <button 
+                                        onClick={() => setAddingForMed(null)}
+                                        className="p-1 text-muted-foreground"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    <button 
+                                      onClick={() => {
+                                        setAddingForMed(m._id);
+                                        setNewTime("08:00");
+                                      }}
+                                      className="p-1 border border-dashed border-border text-muted-foreground hover:text-primary hover:border-primary/50 rounded-md flex items-center gap-1 text-xs"
+                                    >
+                                      <Plus className="w-3.5 h-3.5" />
+                                      <span className="text-[11px]">Add</span>
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Desktop Table View (>= md) */}
+                        <div className="hidden md:block overflow-x-auto">
                           <table className="w-full text-left text-sm">
                             <thead>
                               <tr className="text-muted-foreground border-b border-border">
@@ -411,36 +475,36 @@ export default function HistoryPage() {
                   exit={{ opacity: 0, y: -10 }}
                   className="space-y-6"
                 >
-                  <div className="bg-card border border-border rounded-3xl p-6 md:p-8 shadow-sm max-w-2xl">
-                    <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <div className="bg-card border border-border rounded-2xl sm:rounded-3xl p-5 sm:p-8 shadow-sm max-w-2xl">
+                    <h2 className="text-lg sm:text-xl font-bold mb-4 flex items-center gap-2">
                       <Settings className="w-5 h-5 text-primary" /> Profile Settings
                     </h2>
-                    <div className="mb-6">
-                      <p className="text-sm text-muted-foreground mb-1">Name</p>
-                      <p className="font-semibold text-foreground">{user?.name}</p>
+                    <div className="mb-4 sm:mb-6">
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-1">Name</p>
+                      <p className="text-sm sm:text-base font-semibold text-foreground">{user?.name}</p>
                     </div>
-                    <div className="mb-6">
-                      <p className="text-sm text-muted-foreground mb-1">Email</p>
-                      <p className="font-semibold text-foreground">{user?.email}</p>
+                    <div className="mb-4 sm:mb-6">
+                      <p className="text-xs sm:text-sm text-muted-foreground mb-1">Email</p>
+                      <p className="text-sm sm:text-base font-semibold text-foreground">{user?.email}</p>
                     </div>
                     
-                    <hr className="border-border my-6" />
+                    <hr className="border-border my-4 sm:my-6" />
                     
-                    <h3 className="font-bold mb-4">Telegram Notifications</h3>
-                    <p className="text-sm text-muted-foreground mb-6">
+                    <h3 className="font-bold text-sm sm:text-base mb-2 sm:mb-4">Telegram Notifications</h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6">
                       Update your Telegram Chat ID to change where your medicine reminders are sent. 
                       A verification message will be sent to confirm the change.
                     </p>
                     
-                    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-end max-w-md">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-end max-w-md">
                       <div className="w-full">
-                        <label className="block text-sm font-medium text-foreground mb-1.5">Chat ID</label>
+                        <label className="block text-xs sm:text-sm font-medium text-foreground mb-1.5">Chat ID</label>
                         <input 
                           type="text" 
                           id="chatIdInput"
                           defaultValue={user?.telegram_chat_id || ""}
                           placeholder="e.g. 123456789"
-                          className="w-full bg-secondary border border-border rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                          className="w-full bg-secondary border border-border rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
                         />
                       </div>
                       <button 
@@ -468,7 +532,7 @@ export default function HistoryPage() {
                           }
                         }}
                         id="saveChatIdBtn"
-                        className="w-full sm:w-auto py-3 px-6 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity shadow-sm whitespace-nowrap"
+                        className="w-full sm:w-auto py-2.5 sm:py-3 px-5 sm:px-6 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity shadow-sm whitespace-nowrap text-sm"
                       >
                         Update Chat ID
                       </button>

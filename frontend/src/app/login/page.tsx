@@ -44,8 +44,8 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col transition-colors duration-300">
-      <nav className="p-6 flex justify-between items-center absolute w-full top-0">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight">
+      <nav className="p-4 sm:p-6 flex justify-between items-center absolute w-full top-0">
+        <Link href="/" className="flex items-center gap-2 font-bold text-lg sm:text-xl tracking-tight">
           <div className="p-1.5 bg-primary/10 rounded-lg">
             <Pill className="text-primary w-5 h-5" />
           </div>
@@ -54,15 +54,15 @@ export default function LoginPage() {
         <ThemeToggle />
       </nav>
 
-      <main className="flex-1 flex items-center justify-center p-6">
+      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 pt-20 sm:pt-24">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md bg-card border border-border p-8 rounded-3xl shadow-sm"
+          className="w-full max-w-md bg-card border border-border p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm"
         >
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
-            <p className="text-muted-foreground">Sign in to manage your prescriptions</p>
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2">Welcome back</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">Sign in to manage your prescriptions</p>
           </div>
 
           {error && (
