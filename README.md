@@ -1,57 +1,69 @@
-# MediRemind AI - Project Architecture
 
-MediRemind is an AI-powered smart prescription reminder system. It allows users to upload images of their medical prescriptions, automatically extracts the prescribed medicines and dosages using state-of-the-art Vision AI, and schedules automated push notifications via Telegram to remind users to take their medicines on time.
+# MediRemind AI
 
-## High-Level Architecture
+MediRemind AI is an intelligent prescription reminder platform that converts prescription images into structured medication schedules and automatically reminds users to take their medicines through Telegram.
 
-The project is built on a decoupled architecture, separating the client-side user interface from the heavy backend AI processing and scheduling tasks.
+## Product Flow
+
+```text
+Prescription Image
+        |
+        v
+   Vision AI
+        |
+        v
+Medicine & Dosage Extraction
+        |
+        v
+   Medication Schedule
+        |
+        v
+    MongoDB
+        |
+        v
+  Reminder Scheduler
+        |
+        v
+ Telegram Notification
+```
+
+## Key Features
+
+- Upload prescription images and automatically extract medicines, dosages, frequency, and duration.
+- AI-powered prescription understanding using multimodal Vision AI.
+- Automatically create medication schedules from extracted prescription data.
+- Persistent medication storage using MongoDB.
+- Automated background reminders using APScheduler.
+- Deliver medication reminders directly through Telegram.
+- Optional local AI inference through LM Studio for privacy-focused deployments.
+
+## Architecture
+
+MediRemind uses a decoupled frontend and backend architecture.
 
 ```mermaid
 graph TD
-    User([User]) -->|Interacts with UI| Frontend[Next.js Frontend]
-    User -->|Receives Notifications| Telegram[Telegram App]
-    
-    Frontend -->|Uploads Image & Syncs Data| Backend[FastAPI Backend]
-    
-    subgraph Backend Infrastructure
-        Backend -->|Saves/Reads Data| DB[(MongoDB)]
-        Backend -->|Schedules Tasks| Scheduler[APScheduler]
-        Scheduler -->|Triggers Messages| TelegramBot[Telegram Bot API]
-    end
-    
-    subgraph AI Extraction Layer
-        Backend -->|Sends Image (Base64)| Groq[Groq API / Qwen Vision]
-        Backend -.->|Optional Local Fallback| LMStudio[LMStudio Local API]
-        Groq -->|Returns Structured JSON| Backend
-    end
-    
-    TelegramBot -->|Sends Message| Telegram
+    User[User] --> Frontend[Next.js Frontend]
+    Frontend --> Backend[FastAPI Backend]
+
+    Backend --> AI[Vision AI]
+    Backend --> DB[(MongoDB)]
+    Backend --> Scheduler[APScheduler]
+
+    Scheduler --> TelegramBot[Telegram Bot API]
+    TelegramBot --> User
 ```
 
 ## Technology Stack
 
-### Frontend
-- **Framework:** Next.js 15 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Animations:** Framer Motion
-- **Icons:** Lucide React
+- Frontend: Next.js, TypeScript, Tailwind CSS
+- Backend: FastAPI, Python
+- Database: MongoDB with Motor
+- AI: Groq Vision API with Qwen Vision
+- Local AI: LM Studio
+- Scheduling: APScheduler
+- Notifications: Telegram Bot API
 
-### Backend
-- **Framework:** FastAPI (Python)
-- **Database:** MongoDB
-- **DB Client:** Motor (Async MongoDB Driver)
-- **Task Scheduling:** APScheduler (Background task runner for medication reminders)
-- **Integrations:** Telegram Bot API (python-telegram-bot)
+## Disclaimer
 
-### AI Services
-- **Primary Production OCR:** Groq Cloud API using the blazing fast **`qwen/qwen3.6-27b`** multimodal vision model.
-- **Local Fallback:** LMStudio (Exposes an OpenAI-compatible endpoint for localized, privacy-first inference).
-
-## Core Workflows
-
-### 1. Prescription Parsing
-When a user uploads a prescription image, the Next.js frontend sends it to the FastAPI backend. The backend encodes the image to Base64 and constructs a standard OpenAI-compatible JSON payload. It passes this to the Groq Vision API (or LMStudio) with strict prompt instructions. The AI model reads the image and returns a clean, structured JSON array of medicines, dosages, and duration.
-
-### 2. Reminder Scheduling
-When a user saves a prescription to their profile, the medicines are stored in MongoDB. The backend runs an asynchronous background process via `APScheduler`. Every minute, it checks the database for medicines whose schedule matches the current time and dispatches an alert through the Telegram Bot API directly to the user's connected Telegram Chat ID.
+MediRemind AI is a medication reminder and prescription-assistance tool. AI-generated information should always be verified against the original prescription. It is not intended to diagnose conditions, prescribe medication, or replace professional medical advice.
