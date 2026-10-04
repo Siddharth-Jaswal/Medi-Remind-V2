@@ -6,7 +6,9 @@ from typing import List, Dict, Any
 
 LLM_SERVICE_URL = os.getenv("LLM_SERVICE_URL", "http://localhost:1234/v1/chat/completions")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "lm-studio")
-LLM_MODEL = os.getenv("LLM_MODEL", "local-model")
+LLM_MODEL = os.getenv("LLM_MODEL", "qwen/qwen3.8-27b")
+if LLM_MODEL in ("qwen/qwen3.6-27b", "llama-3.2-11b-vision-preview"):
+    LLM_MODEL = "qwen/qwen3.8-27b"
 
 prompt_message = """
 Extract the medicines from this prescription image. 
