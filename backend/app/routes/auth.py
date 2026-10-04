@@ -60,40 +60,46 @@ async def register(request: RegisterRequest):
                 "email": new_user.email
             }
         }
+    except HTTPException:
+        raise
     except Exception as e:
-        import traceback
-        raise HTTPException(status_code=500, detail=traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Database or server error: {str(e)}")
 
 @router.post("/login", response_model=Token)
 async def login(request: LoginRequest):
-    user = await db.db["users"].find_one({"email": request.email})
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
+    try:
+        user = await db.db["users"].find_one({"email": request.email})
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect email or password",
+            )
+            
+        if not verify_password(request.password, user["hashed_password"]):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect email or password",
+            )
+            
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user["email"]}, expires_delta=access_token_expires
         )
         
-    if not verify_password(request.password, user["hashed_password"]):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-        )
-        
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user["email"]}, expires_delta=access_token_expires
-    )
-    
-    return {
-        "access_token": access_token, 
-        "token_type": "bearer",
-        "user": {
-            "id": str(user["_id"]),
-            "name": user["name"],
-            "email": user["email"],
-            "telegram_chat_id": user.get("telegram_chat_id")
+        return {
+            "access_token": access_token, 
+            "token_type": "bearer",
+            "user": {
+                "id": str(user["_id"]),
+                "name": user["name"],
+                "email": user["email"],
+                "telegram_chat_id": user.get("telegram_chat_id")
+            }
         }
-    }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database or server error: {str(e)}")
 
 @router.get("/me")
 async def read_users_me(current_user: dict = Depends(get_current_user)):
